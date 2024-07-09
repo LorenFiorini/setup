@@ -40,31 +40,20 @@ def run_git_command(command, cwd):
 
 
 def main():
-
     try:
         home_directory = os.getenv('HOME')
         url_base = 'https://github.com/LorenFiorini/'
         repo = define_repositories(url_base)
         name = sys.argv[1]
-        # Check if the repository is defined
-        # repo_url = f'{url_base}{name}.git'
-        # if name in repo:
-        #     repo_url = repo[name]
         try:
             repo_url = repo[name]
         except KeyError:
             repo_url = f'{url_base}{name}.git'
-
-        # Define the directory
-        # dir = f'{home_directory}/goinfre/{name}'
-        # if len(sys.argv) > 2:
-        #     dir = sys.argv[2] + '/' + name
         try:
             dir = f'{sys.argv[2]}/{name}'
         except IndexError:
             dir = f'{home_directory}/goinfre/{name}'
         base_dir = os.path.dirname(dir)
-
 
         # Check if the dir exists
         if not os.path.exists(dir):
@@ -73,7 +62,6 @@ def main():
             run_git_command(['git', 'clone', repo_url, name], cwd=base_dir)
         else:
             run_git_command(['git', 'pull', 'origin', 'main'], cwd=dir)
-
     except IndexError:
         print(f'Error: Missing repository argument.')
         display_usage()
